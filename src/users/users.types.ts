@@ -1,7 +1,7 @@
 export type User = {
   id: string;
-  email: string;
   name: string;
+  password: string;
 };
 
 export type CreateUserDto = Omit<User, 'id'>;

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { CreateUserDto, User } from './users.types';
 import {
@@ -9,12 +9,30 @@ import {
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [];
+  private readonly users: User[] = [
+    {
+      id: 'bd45cc0a-d19d-42da-9f0c-4c73c143b46f',
+      name: 'admin',
+      password: 'qwerty'
+    }
+  ];
 
   getById(id: string): Result<User> {
     const user = this.users.find((u) => u.id === id);
     if (user === undefined) {
-      return createResultError(new NotFoundException('User not found'));
+      return createResultError(new Error('User not found'));
+    }
+
+    return createResultSuccess(user);
+  }
+
+  validateUser(name: string, password: string): Result<User> {
+    const user = this.users.find(
+      (u) => u.name === name && u.password === password
+    );
+
+    if (user === undefined) {
+      return createResultError(new Error());
     }
 
     return createResultSuccess(user);

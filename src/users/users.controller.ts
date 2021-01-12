@@ -5,7 +5,8 @@ import {
   Body,
   Param,
   ParseUUIDPipe,
-  UsePipes
+  UsePipes,
+  NotFoundException
 } from '@nestjs/common';
 import * as Joi from 'joi';
 import { UsersService } from './users.service';
@@ -15,7 +16,7 @@ import { isResultError } from '../utils/result';
 
 const createUserScheme = Joi.object<CreateUserDto>({
   name: Joi.string().min(5).max(100),
-  email: Joi.string().email()
+  password: Joi.string().min(5).max(100)
 });
 
 @Controller('users')
@@ -26,7 +27,7 @@ export class UsersController {
   getById(@Param('id', new ParseUUIDPipe()) id: string): User {
     const result = this.usersService.getById(id);
     if (isResultError(result)) {
-      throw result.error;
+      throw new NotFoundException(result.error.message);
     }
 
     return result.value;
