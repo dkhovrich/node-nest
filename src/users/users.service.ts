@@ -26,18 +26,6 @@ export class UsersService {
     return createResultSuccess(user);
   }
 
-  validateUser(name: string, password: string): Result<User> {
-    const user = this.users.find(
-      (u) => u.name === name && u.password === password
-    );
-
-    if (user === undefined) {
-      return createResultError(new Error());
-    }
-
-    return createResultSuccess(user);
-  }
-
   getAll(): User[] {
     return this.users;
   }
