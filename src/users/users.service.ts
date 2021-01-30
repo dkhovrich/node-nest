@@ -7,9 +7,21 @@ import {
   Result
 } from '../utils/result';
 
+export const USER_SERVICE = Symbol();
+
+export interface IUsersService {
+  users: User[];
+
+  getById(id: string): Result<User>;
+
+  getAll(): User[];
+
+  create(userDto: CreateUserDto): void;
+}
+
 @Injectable()
-export class UsersService {
-  private readonly users: User[] = [
+export class UsersService implements IUsersService {
+  readonly users: User[] = [
     {
       id: 'bd45cc0a-d19d-42da-9f0c-4c73c143b46f',
       name: 'admin',

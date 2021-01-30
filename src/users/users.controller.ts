@@ -6,10 +6,11 @@ import {
   Param,
   ParseUUIDPipe,
   UsePipes,
-  NotFoundException
+  NotFoundException,
+  Inject
 } from '@nestjs/common';
 import * as Joi from 'joi';
-import { UsersService } from './users.service';
+import { IUsersService, USER_SERVICE } from './users.service';
 import { CreateUserDto, User } from './users.types';
 import { JoiValidationPipe } from '../utils/joi-validation.pipe';
 import { isResultError } from '../utils/result';
@@ -21,7 +22,9 @@ const createUserScheme = Joi.object<CreateUserDto>({
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    @Inject(USER_SERVICE) private readonly usersService: IUsersService
+  ) {}
 
   @Get(':id')
   getById(@Param('id', new ParseUUIDPipe()) id: string): User {
